@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Gallery</title>
+    <link rel="stylesheet" href="../style/style.css" />
+  </head>
+  <body>
+    <!-- nav -->
+    <nav>
+      <h1>Hello ! this is Batoul</h1>
+      <ul class="nav-dropdown">
+        <a href="cv.html" class="nav-item">cv</a>
+        <a href="gallery.html" class="nav-item">gallery</a>
+        <a href="contact.html" class="nav-item">contact</a>
+      </ul>
+    </nav>
+    <!-- gallery page content -->
+    <div class="container">
+      <h1>Gallery Image</h1>
+
+      <div class="image-container" id="imageContainer"></div>
+
+      <div class="popup-image" id="popupImage">
+        <span>&times;</span>
+        <img id="popupImg" src="" alt="" />
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const imageContainer = document.getElementById("imageContainer");
+
+        fetch("../../data/gallery.json")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Failed to load gallery.json");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            // Dynamically add images to the gallery
+            data.images.forEach((image) => {
+              const imgElement = document.createElement("img");
+              imgElement.src = `../../assets/images/${image}`;
+              imgElement.alt = "";
+              imgElement.classList.add("image");
+
+              imgElement.onclick = () => {
+                const popupImage = document.getElementById("popupImage");
+                const popupImg = document.getElementById("popupImg");
+
+                popupImage.style.display = "block";
+                popupImg.src = imgElement.src;
+              };
+
+              imageContainer.appendChild(imgElement);
+            });
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+
+        document.querySelector(".popup-image span").onclick = () => {
+          document.querySelector(".popup-image").style.display = "none";
+        };
+      });
+    </script>
+  </body>
+</html>
